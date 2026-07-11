@@ -88,7 +88,7 @@ public interface FuseOperations {
 	 *             but may also be <code>null</code> if the file is open.
 	 * @return 0 on success or negated error code (-errno)
 	 */
-	default int getattr(String path, Stat stat, @Nullable FileInfo fi) {
+	default int getattr(String path, Stat stat, @Nullable FileInfo fi, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -101,7 +101,7 @@ public interface FuseOperations {
 	 *             buffer, it should be truncated.
 	 * @return The return value should be 0
 	 */
-	default int readlink(String path, ByteBuffer buf, long len) {
+	default int readlink(String path, ByteBuffer buf, long len, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -117,7 +117,7 @@ public interface FuseOperations {
 	 * @param rdev ignored if mode does not contain <code>S_IFCHR</code> or <code>S_IFBLK</code>
 	 * @return 0 on success or negated error code (-errno)
 	 */
-	default int mknod(String path, short mode, int rdev) {
+	default int mknod(String path, short mode, int rdev, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -132,7 +132,7 @@ public interface FuseOperations {
 	 * @param mode file mode (using bitwise OR)
 	 * @return 0 on success or negated error code (-errno)
 	 */
-	default int mkdir(String path, int mode) {
+	default int mkdir(String path, int mode, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -142,7 +142,7 @@ public interface FuseOperations {
 	 * @param path file path
 	 * @return 0 on success or negated error code (-errno)
 	 */
-	default int unlink(String path) {
+	default int unlink(String path, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -152,7 +152,7 @@ public interface FuseOperations {
 	 * @param path file path
 	 * @return 0 on success or negated error code (-errno)
 	 */
-	default int rmdir(String path) {
+	default int rmdir(String path, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -163,7 +163,7 @@ public interface FuseOperations {
 	 * @param target   content of the link
 	 * @return 0 on success or negated error code (-errno)
 	 */
-	default int symlink(String linkname, String target) {
+	default int symlink(String linkname, String target, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -181,7 +181,7 @@ public interface FuseOperations {
 	 * @return 0 on success or negated error code (-errno)
 	 */
 	// TODO create enum for flags
-	default int rename(String oldpath, String newpath, int flags) {
+	default int rename(String oldpath, String newpath, int flags, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -192,7 +192,7 @@ public interface FuseOperations {
 	 * @param target   content of the link
 	 * @return 0 on success or negated error code (-errno)
 	 */
-	default int link(String linkname, String target) {
+	default int link(String linkname, String target, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -205,7 +205,7 @@ public interface FuseOperations {
 	 *             but may also be <code>null</code> if the file is open.
 	 * @return 0 on success or negated error code (-errno)
 	 */
-	default int chmod(String path, int mode, @Nullable FileInfo fi) {
+	default int chmod(String path, int mode, @Nullable FileInfo fi, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -219,7 +219,7 @@ public interface FuseOperations {
 	 *             but may also be <code>null</code> if the file is open.
 	 * @return 0 on success or negated error code (-errno)
 	 */
-	default int chown(String path, int uid, int gid, @Nullable FileInfo fi) {
+	default int chown(String path, int uid, int gid, @Nullable FileInfo fi, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -237,7 +237,7 @@ public interface FuseOperations {
 	 *             but may also be <code>null</code> if the file is open.
 	 * @return 0 on success or negated error code (-errno)
 	 */
-	default int truncate(String path, long size, @Nullable FileInfo fi) {
+	default int truncate(String path, long size, @Nullable FileInfo fi, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -275,7 +275,7 @@ public interface FuseOperations {
 	 * @param fi   file info, which may be used to store a file handle
 	 * @return 0 on success or negated error code (-errno)
 	 */
-	default int open(String path, FileInfo fi) {
+	default int open(String path, FileInfo fi, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -296,7 +296,7 @@ public interface FuseOperations {
 	 * @param fi     file info
 	 * @return number of bytes read or negated error code (-errno)
 	 */
-	default int read(String path, ByteBuffer buf, long count, long offset, FileInfo fi) {
+	default int read(String path, ByteBuffer buf, long count, long offset, FileInfo fi, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -317,7 +317,7 @@ public interface FuseOperations {
 	 * @param fi     file info
 	 * @return number of bytes written or negated error code (-errno)
 	 */
-	default int write(String path, ByteBuffer buf, long count, long offset, FileInfo fi) {
+	default int write(String path, ByteBuffer buf, long count, long offset, FileInfo fi, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -330,7 +330,7 @@ public interface FuseOperations {
 	 * @param statvfs The statistics object to be filled with data
 	 * @return 0 on success or negated error code (-errno)
 	 */
-	default int statfs(String path, Statvfs statvfs) {
+	default int statfs(String path, Statvfs statvfs, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -365,7 +365,7 @@ public interface FuseOperations {
 	 * @param fi   file info
 	 * @return 0 on success or negated error code (-errno)
 	 */
-	default int flush(String path, FileInfo fi) {
+	default int flush(String path, FileInfo fi, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -386,7 +386,7 @@ public interface FuseOperations {
 	 * @param fi   file info
 	 * @return 0 on success or negated error code (-errno)
 	 */
-	default int release(String path, FileInfo fi) {
+	default int release(String path, FileInfo fi, FuseContext fuse_context) {
 		return 0;
 	}
 
@@ -398,7 +398,7 @@ public interface FuseOperations {
 	 * @param fi       file info
 	 * @return 0 on success or negated error code (-errno)
 	 */
-	default int fsync(String path, int datasync, FileInfo fi) {
+	default int fsync(String path, int datasync, FileInfo fi, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -412,7 +412,7 @@ public interface FuseOperations {
 	 *              <code>XATTR_CREATE</code> or <code>XATTR_REPLACE</code> may be used.
 	 * @return 0 on success or negated error code (-errno)
 	 */
-	default int setxattr(String path, String name, ByteBuffer value, int flags) {
+	default int setxattr(String path, String name, ByteBuffer value, int flags, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -424,7 +424,7 @@ public interface FuseOperations {
 	 * @param value attribute value. If buffer capacity is zero, return the size of the value
 	 * @return the non-negative value size or negated error code (-errno)
 	 */
-	default int getxattr(String path, String name, ByteBuffer value) {
+	default int getxattr(String path, String name, ByteBuffer value, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -435,7 +435,7 @@ public interface FuseOperations {
 	 * @param list consecutive list of null-terminated attribute names (as many as fit into the buffer). If buffer capacity is zero, return the size of the list
 	 * @return the non-negative number of bytes written to the list buffer or negated error code (-errno)
 	 */
-	default int listxattr(String path, ByteBuffer list) {
+	default int listxattr(String path, ByteBuffer list, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -446,7 +446,7 @@ public interface FuseOperations {
 	 * @param name attribute name
 	 * @return 0 on success or negated error code (-errno)
 	 */
-	default int removexattr(String path, String name) {
+	default int removexattr(String path, String name, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -463,7 +463,7 @@ public interface FuseOperations {
 	 * @param fi   file info, which may be used to store a file handle
 	 * @return 0 on success or negated error code (-errno)
 	 */
-	default int opendir(String path, FileInfo fi) {
+	default int opendir(String path, FileInfo fi, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -495,7 +495,7 @@ public interface FuseOperations {
 	 *               set.
 	 * @return 0 on success or negated error code (-errno)
 	 */
-	default int readdir(String path, DirFiller filler, long offset, FileInfo fi, int flags) {
+	default int readdir(String path, DirFiller filler, long offset, FileInfo fi, int flags, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -507,7 +507,7 @@ public interface FuseOperations {
 	 * @param fi   file info
 	 * @return 0 on success or negated error code (-errno)
 	 */
-	default int releasedir(@Nullable String path, FileInfo fi) {
+	default int releasedir(@Nullable String path, FileInfo fi, FuseContext fuse_context) {
 		return 0;
 	}
 
@@ -520,7 +520,7 @@ public interface FuseOperations {
 	 * @param fi       file info
 	 * @return 0 on success or negated error code (-errno)
 	 */
-	default int fsyncdir(@Nullable String path, int datasync, FileInfo fi) {
+	default int fsyncdir(@Nullable String path, int datasync, FileInfo fi, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -556,7 +556,7 @@ public interface FuseOperations {
 	 * @param mask bitwise OR of file access checks
 	 * @return 0 on success or negated error code (-errno)
 	 */
-	default int access(String path, int mask) {
+	default int access(String path, int mask, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -575,7 +575,7 @@ public interface FuseOperations {
 	 * @param fi   file info, which may be used to store a file handle
 	 * @return 0 on success or negated error code (-errno)
 	 */
-	default int create(String path, int mode, FileInfo fi) {
+	default int create(String path, int mode, FileInfo fi, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -631,7 +631,7 @@ public interface FuseOperations {
 	 *              but may also be <code>null</code> if the file is open.
 	 * @return 0 on success or negated error code (-errno)
 	 */
-	default int utimens(String path, TimeSpec atime, TimeSpec mtime, @Nullable FileInfo fi) {
+	default int utimens(String path, TimeSpec atime, TimeSpec mtime, @Nullable FileInfo fi, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -668,7 +668,7 @@ public interface FuseOperations {
 	 * @param data  data (depends on <code>cmd</code> and may be <code>null</code>)
 	 * @return 0 on success or negated error code (-errno)
 	 */
-	default int ioctl(String path, int cmd, ByteBuffer arg, FileInfo fi, int flags, @Nullable ByteBuffer data) {
+	default int ioctl(String path, int cmd, ByteBuffer arg, FileInfo fi, int flags, @Nullable ByteBuffer data, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -750,7 +750,7 @@ public interface FuseOperations {
 	 * @param op   one of <code>LOCK_SH</code>, <code>LOCK_EX</code> or <code>LOCK_UN</code>
 	 * @return 0 on success or negated error code (-errno)
 	 */
-	default int flock(String path, FileInfo fi, int op) {
+	default int flock(String path, FileInfo fi, int op, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 
@@ -769,7 +769,7 @@ public interface FuseOperations {
 	 * @param fi     file info
 	 * @return 0 on success or negated error code (-errno)
 	 */
-	default int fallocate(String path, int mode, long offset, long length, FileInfo fi) {
+	default int fallocate(String path, int mode, long offset, long length, FileInfo fi, FuseContext fuse_context) {
 		return -errno().enosys();
 	}
 }

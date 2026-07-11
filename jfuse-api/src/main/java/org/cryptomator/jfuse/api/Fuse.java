@@ -194,7 +194,7 @@ public abstract class Fuse implements AutoCloseable {
 	}
 
 	/**
-	 * Decorates the {@link FuseOperations#getattr(String, Stat, FileInfo) getattr} call of a FuseOperations object
+	 * Decorates the {@link FuseOperations#getattr(String, Stat, FileInfo, FuseContext) getattr} call of a FuseOperations object
 	 * in order to detect accesses to {@value MOUNT_PROBE} system during {@link #waitForMountingToComplete(Path, Future)}}.
 	 *
 	 * @param delegate  The original FuseOperations object
@@ -203,11 +203,11 @@ public abstract class Fuse implements AutoCloseable {
 	private record MountProbeObserver(FuseOperations delegate, Runnable onObserve) implements FuseOperationsDecorator {
 
 		@Override
-		public int getattr(String path, Stat stat, @Nullable FileInfo fi) {
+		public int getattr(String path, Stat stat, @Nullable FileInfo fi,  FuseContext fuse_context) {
 			if (MOUNT_PROBE.equals(path)) {
 				onObserve.run();
 			}
-			return delegate.getattr(path, stat, fi);
+			return delegate.getattr(path, stat, fi, fuse_context);
 		}
 	}
 
