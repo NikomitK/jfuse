@@ -211,4 +211,7 @@ public abstract class Fuse implements AutoCloseable {
 		}
 	}
 
+	public FuseContext fuseGetContext() {
+		return null;
+	}
 }

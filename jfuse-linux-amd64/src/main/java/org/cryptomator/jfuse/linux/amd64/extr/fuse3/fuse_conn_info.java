@@ -30,7 +30,8 @@ import static java.lang.foreign.MemoryLayout.PathElement.*;
  *     uint32_t padding : 31;
  *     uint64_t capable_ext;
  *     uint64_t want_ext;
- *     uint32_t reserved[16];
+ *     uint16_t request_timeout;
+ *     uint16_t reserved[31];
  * }
  * }
  */
@@ -55,7 +56,8 @@ public class fuse_conn_info {
         MemoryLayout.paddingLayout(4),
         fuse_h.C_LONG.withName("capable_ext"),
         fuse_h.C_LONG.withName("want_ext"),
-        MemoryLayout.sequenceLayout(16, fuse_h.C_INT).withName("reserved")
+        fuse_h.C_SHORT.withName("request_timeout"),
+        MemoryLayout.sequenceLayout(31, fuse_h.C_SHORT).withName("reserved")
     ).withName("fuse_conn_info");
 
     /**
@@ -637,24 +639,68 @@ public class fuse_conn_info {
         struct.set(want_ext$LAYOUT, want_ext$OFFSET, fieldValue);
     }
 
+    private static final OfShort request_timeout$LAYOUT = (OfShort)$LAYOUT.select(groupElement("request_timeout"));
+
+    /**
+     * Layout for field:
+     * {@snippet lang=c :
+     * uint16_t request_timeout
+     * }
+     */
+    public static final OfShort request_timeout$layout() {
+        return request_timeout$LAYOUT;
+    }
+
+    private static final long request_timeout$OFFSET = 64;
+
+    /**
+     * Offset for field:
+     * {@snippet lang=c :
+     * uint16_t request_timeout
+     * }
+     */
+    public static final long request_timeout$offset() {
+        return request_timeout$OFFSET;
+    }
+
+    /**
+     * Getter for field:
+     * {@snippet lang=c :
+     * uint16_t request_timeout
+     * }
+     */
+    public static short request_timeout(MemorySegment struct) {
+        return struct.get(request_timeout$LAYOUT, request_timeout$OFFSET);
+    }
+
+    /**
+     * Setter for field:
+     * {@snippet lang=c :
+     * uint16_t request_timeout
+     * }
+     */
+    public static void request_timeout(MemorySegment struct, short fieldValue) {
+        struct.set(request_timeout$LAYOUT, request_timeout$OFFSET, fieldValue);
+    }
+
     private static final SequenceLayout reserved$LAYOUT = (SequenceLayout)$LAYOUT.select(groupElement("reserved"));
 
     /**
      * Layout for field:
      * {@snippet lang=c :
-     * uint32_t reserved[16]
+     * uint16_t reserved[31]
      * }
      */
     public static final SequenceLayout reserved$layout() {
         return reserved$LAYOUT;
     }
 
-    private static final long reserved$OFFSET = 64;
+    private static final long reserved$OFFSET = 66;
 
     /**
      * Offset for field:
      * {@snippet lang=c :
-     * uint32_t reserved[16]
+     * uint16_t reserved[31]
      * }
      */
     public static final long reserved$offset() {
@@ -664,7 +710,7 @@ public class fuse_conn_info {
     /**
      * Getter for field:
      * {@snippet lang=c :
-     * uint32_t reserved[16]
+     * uint16_t reserved[31]
      * }
      */
     public static MemorySegment reserved(MemorySegment struct) {
@@ -674,19 +720,19 @@ public class fuse_conn_info {
     /**
      * Setter for field:
      * {@snippet lang=c :
-     * uint32_t reserved[16]
+     * uint16_t reserved[31]
      * }
      */
     public static void reserved(MemorySegment struct, MemorySegment fieldValue) {
         MemorySegment.copy(fieldValue, 0L, struct, reserved$OFFSET, reserved$LAYOUT.byteSize());
     }
 
-    private static long[] reserved$DIMS = { 16 };
+    private static long[] reserved$DIMS = { 31 };
 
     /**
      * Dimensions for array field:
      * {@snippet lang=c :
-     * uint32_t reserved[16]
+     * uint16_t reserved[31]
      * }
      */
     public static long[] reserved$dimensions() {
@@ -697,20 +743,20 @@ public class fuse_conn_info {
     /**
      * Indexed getter for field:
      * {@snippet lang=c :
-     * uint32_t reserved[16]
+     * uint16_t reserved[31]
      * }
      */
-    public static int reserved(MemorySegment struct, long index0) {
-        return (int)reserved$ELEM_HANDLE.get(struct, 0L, index0);
+    public static short reserved(MemorySegment struct, long index0) {
+        return (short)reserved$ELEM_HANDLE.get(struct, 0L, index0);
     }
 
     /**
      * Indexed setter for field:
      * {@snippet lang=c :
-     * uint32_t reserved[16]
+     * uint16_t reserved[31]
      * }
      */
-    public static void reserved(MemorySegment struct, long index0, int fieldValue) {
+    public static void reserved(MemorySegment struct, long index0, short fieldValue) {
         reserved$ELEM_HANDLE.set(struct, 0L, index0, fieldValue);
     }
 
