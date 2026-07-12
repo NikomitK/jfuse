@@ -6,6 +6,7 @@ import org.cryptomator.jfuse.api.FileInfo;
 import org.cryptomator.jfuse.api.FileModes;
 import org.cryptomator.jfuse.api.FuseConfig;
 import org.cryptomator.jfuse.api.FuseConnInfo;
+import org.cryptomator.jfuse.api.FuseContext;
 import org.cryptomator.jfuse.api.FuseOperations;
 import org.cryptomator.jfuse.api.Stat;
 import org.cryptomator.jfuse.api.Statvfs;
@@ -117,7 +118,7 @@ public abstract sealed class AbstractMirrorFileSystem implements FuseOperations 
 	}
 
 	@Override
-	public int access(String path, int mask) {
+	public int access(String path, int mask, FuseContext fuseContext) {
 		LOG.trace("access {}", path);
 		Path node = resolvePath(path);
 		Set<AccessMode> desiredAccess = EnumSet.noneOf(AccessMode.class);
@@ -137,7 +138,7 @@ public abstract sealed class AbstractMirrorFileSystem implements FuseOperations 
 	}
 
 	@Override
-	public int statfs(String path, Statvfs statvfs) {
+	public int statfs(String path, Statvfs statvfs, FuseContext fuseContext) {
 		LOG.trace("statfs");
 		try {
 			long bsize = 4096L;
@@ -154,7 +155,7 @@ public abstract sealed class AbstractMirrorFileSystem implements FuseOperations 
 	}
 
 	@Override
-	public int symlink(String linkname, String target) {
+	public int symlink(String linkname, String target, FuseContext fuseContext) {
 		LOG.trace("symlink {} -> {}", linkname, target);
 		Path node = resolvePath(linkname);
 		try {
@@ -166,7 +167,7 @@ public abstract sealed class AbstractMirrorFileSystem implements FuseOperations 
 	}
 
 	@Override
-	public int readlink(String path, ByteBuffer buf, long len) {
+	public int readlink(String path, ByteBuffer buf, long len, FuseContext fuseContext) {
 		LOG.trace("readlink {}", path);
 		Path node = resolvePath(path);
 		try {
@@ -185,7 +186,7 @@ public abstract sealed class AbstractMirrorFileSystem implements FuseOperations 
 
 	@SuppressWarnings("OctalInteger")
 	@Override
-	public int getattr(String path, Stat stat, FileInfo fi) {
+	public int getattr(String path, Stat stat, FileInfo fi, FuseContext fuseContext) {
 		LOG.trace("getattr {}", path);
 		Path node = resolvePath(path);
 		try {
@@ -200,7 +201,7 @@ public abstract sealed class AbstractMirrorFileSystem implements FuseOperations 
 	}
 
 	@Override
-	public int getxattr(String path, String name, ByteBuffer value) {
+	public int getxattr(String path, String name, ByteBuffer value, FuseContext fuseContext) {
 		LOG.trace("getxattr {} {}", path, name);
 		Path node = resolvePath(path);
 		try {
@@ -224,7 +225,7 @@ public abstract sealed class AbstractMirrorFileSystem implements FuseOperations 
 	}
 
 	@Override
-	public int setxattr(String path, String name, ByteBuffer value, int flags) {
+	public int setxattr(String path, String name, ByteBuffer value, int flags, FuseContext fuseContext) {
 		LOG.trace("setxattr {} {}", path, name);
 		Path node = resolvePath(path);
 		try {
@@ -242,7 +243,7 @@ public abstract sealed class AbstractMirrorFileSystem implements FuseOperations 
 	}
 
 	@Override
-	public int listxattr(String path, ByteBuffer list) {
+	public int listxattr(String path, ByteBuffer list, FuseContext fuseContext) {
 		LOG.trace("listxattr {}", path);
 		Path node = resolvePath(path);
 		try {
@@ -272,7 +273,7 @@ public abstract sealed class AbstractMirrorFileSystem implements FuseOperations 
 	}
 
 	@Override
-	public int removexattr(String path, String name) {
+	public int removexattr(String path, String name, FuseContext fuseContext) {
 		LOG.trace("removexattr {} {}", path, name);
 		Path node = resolvePath(path);
 		try {
@@ -324,7 +325,7 @@ public abstract sealed class AbstractMirrorFileSystem implements FuseOperations 
 	}
 
 	@Override
-	public int utimens(String path, TimeSpec atime, TimeSpec mtime, FileInfo fi) {
+	public int utimens(String path, TimeSpec atime, TimeSpec mtime, FileInfo fi, FuseContext fuseContext) {
 		LOG.trace("utimens {}", path);
 		Path node = resolvePath(path);
 		var view = Files.getFileAttributeView(node, BasicFileAttributeView.class, LinkOption.NOFOLLOW_LINKS);
@@ -339,7 +340,7 @@ public abstract sealed class AbstractMirrorFileSystem implements FuseOperations 
 	}
 
 	@Override
-	public int mkdir(String path, int mode) {
+	public int mkdir(String path, int mode, FuseContext fuseContext) {
 		LOG.trace("mkdir {}", path);
 		Path node = resolvePath(path);
 		var attr = PosixFilePermissions.asFileAttribute(FileModes.toPermissions(mode));
@@ -356,7 +357,7 @@ public abstract sealed class AbstractMirrorFileSystem implements FuseOperations 
 	protected abstract void createDir(Path node, FileAttribute<Set<PosixFilePermission>> permissions) throws IOException;
 
 	@Override
-	public int opendir(String path, FileInfo fi) {
+	public int opendir(String path, FileInfo fi, FuseContext fuseContext) {
 		LOG.trace("opendir {}", path);
 		Path node = resolvePath(path);
 		if (Files.isDirectory(node)) {
@@ -369,7 +370,7 @@ public abstract sealed class AbstractMirrorFileSystem implements FuseOperations 
 	}
 
 	@Override
-	public int readdir(String path, DirFiller filler, long offset, FileInfo fi, int flags) {
+	public int readdir(String path, DirFiller filler, long offset, FileInfo fi, int flags, FuseContext fuseContext) {
 		LOG.trace("readdir {}", path);
 		Path node = resolvePath(path);
 
@@ -388,13 +389,13 @@ public abstract sealed class AbstractMirrorFileSystem implements FuseOperations 
 	}
 
 	@Override
-	public int releasedir(String path, FileInfo fi) {
+	public int releasedir(String path, FileInfo fi, FuseContext fuseContext) {
 		// no-op
 		return 0;
 	}
 
 	@Override
-	public int rmdir(String path) {
+	public int rmdir(String path, FuseContext fuseContext) {
 		Path node = resolvePath(path);
 		if (!Files.isDirectory(node, LinkOption.NOFOLLOW_LINKS)) {
 			return -errno.enotdir();
@@ -410,13 +411,13 @@ public abstract sealed class AbstractMirrorFileSystem implements FuseOperations 
 	}
 
 	@Override
-	public int create(String path, int mode, FileInfo fi) {
+	public int create(String path, int mode, FileInfo fi, FuseContext fuseContext) {
 		LOG.trace("create {}", path);
 		return createOrOpen(path, fi, PosixFilePermissions.asFileAttribute(FileModes.toPermissions(mode)));
 	}
 
 	@Override
-	public int open(String path, FileInfo fi) {
+	public int open(String path, FileInfo fi, FuseContext fuseContext) {
 		LOG.trace("open {}", path);
 		return createOrOpen(path, fi);
 	}
@@ -439,7 +440,7 @@ public abstract sealed class AbstractMirrorFileSystem implements FuseOperations 
 	protected abstract FileChannel openFileChannel(Path node, Set<? extends OpenOption> openOptions, FileAttribute<?>... attrs) throws IOException;
 
 	@Override
-	public int read(String path, ByteBuffer buf, long size, long offset, FileInfo fi) {
+	public int read(String path, ByteBuffer buf, long size, long offset, FileInfo fi, FuseContext fuseContext) {
 		LOG.trace("read {} at pos {}", path, offset);
 		var fc = openFiles.get(fi.getFh());
 		if (fc == null) {
@@ -463,7 +464,7 @@ public abstract sealed class AbstractMirrorFileSystem implements FuseOperations 
 	}
 
 	@Override
-	public int write(String path, ByteBuffer buf, long size, long offset, FileInfo fi) {
+	public int write(String path, ByteBuffer buf, long size, long offset, FileInfo fi, FuseContext fuseContext) {
 		LOG.trace("write {} at pos {}", path, offset);
 		var fc = openFiles.get(fi.getFh());
 		if (fc == null) {
@@ -482,7 +483,7 @@ public abstract sealed class AbstractMirrorFileSystem implements FuseOperations 
 	}
 
 	@Override
-	public int truncate(String path, long size, FileInfo fi) {
+	public int truncate(String path, long size, FileInfo fi, FuseContext fuseContext) {
 		LOG.trace("truncate {} to size {}", path, size);
 		Path node = resolvePath(path);
 		try (FileChannel fc = FileChannel.open(node, StandardOpenOption.WRITE)) {
@@ -496,7 +497,7 @@ public abstract sealed class AbstractMirrorFileSystem implements FuseOperations 
 	}
 
 	@Override
-	public int release(String path, FileInfo fi) {
+	public int release(String path, FileInfo fi, FuseContext fuseContext) {
 		LOG.trace("release {}", path);
 		var fc = openFiles.remove(fi.getFh());
 		if (fc == null) {
@@ -511,7 +512,7 @@ public abstract sealed class AbstractMirrorFileSystem implements FuseOperations 
 	}
 
 	@Override
-	public int unlink(String path) {
+	public int unlink(String path, FuseContext fuseContext) {
 		LOG.trace("unlink {}", path);
 		Path node = resolvePath(path);
 		if (Files.isDirectory(node, LinkOption.NOFOLLOW_LINKS)) {
@@ -528,7 +529,7 @@ public abstract sealed class AbstractMirrorFileSystem implements FuseOperations 
 	}
 
 	@Override
-	public int rename(String oldpath, String newpath, int flags) {
+	public int rename(String oldpath, String newpath, int flags, FuseContext fuseContext) {
 		LOG.trace("rename {} -> {}", oldpath, newpath);
 		Path nodeOld = resolvePath(oldpath);
 		Path nodeNew = resolvePath(newpath);
@@ -555,7 +556,7 @@ public abstract sealed class AbstractMirrorFileSystem implements FuseOperations 
 	}
 
 	@Override
-	public int flush(String path, FileInfo fi) {
+	public int flush(String path, FileInfo fi, FuseContext fuseContext) {
 		LOG.trace("flush {}", path);
 		var fc = openFiles.get(fi.getFh());
 		if (fc == null) {
@@ -570,7 +571,7 @@ public abstract sealed class AbstractMirrorFileSystem implements FuseOperations 
 	}
 
 	@Override
-	public int fsync(String path, int datasync, FileInfo fi) {
+	public int fsync(String path, int datasync, FileInfo fi, FuseContext fuseContext) {
 		LOG.trace("fsync {}", path);
 		var fc = openFiles.get(fi.getFh());
 		if (fc == null) {
@@ -585,7 +586,7 @@ public abstract sealed class AbstractMirrorFileSystem implements FuseOperations 
 	}
 
 	@Override
-	public int fsyncdir(String path, int datasync, FileInfo fi) {
+	public int fsyncdir(String path, int datasync, FileInfo fi, FuseContext fuseContext) {
 		LOG.trace("fsyncdir {}", path);
 		// no-op: this quick and dirty impl doesn't open/close dirs
 		return 0;

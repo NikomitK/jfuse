@@ -122,16 +122,16 @@ class FuseImpl extends Fuse {
 	}
 
 	private int chmod(MemorySegment path, int mode, MemorySegment fi) {
-		return fuseOperations.chmod(path.getString(0), mode, FileInfoImpl.ofNullable(fi));
+		return fuseOperations.chmod(path.getString(0), mode, FileInfoImpl.ofNullable(fi), fuseGetContext());
 	}
 
 	@VisibleForTesting
 	int chown(MemorySegment path, int uid, int gid, MemorySegment fi) {
-		return fuseOperations.chown(path.getString(0), uid, gid, FileInfoImpl.ofNullable(fi));
+		return fuseOperations.chown(path.getString(0), uid, gid, FileInfoImpl.ofNullable(fi), fuseGetContext());
 	}
 
 	private int create(MemorySegment path, int mode, MemorySegment fi) {
-		return fuseOperations.create(path.getString(0), mode, new FileInfoImpl(fi));
+		return fuseOperations.create(path.getString(0), mode, new FileInfoImpl(fi), fuseGetContext());
 	}
 
 	private void destroy(MemorySegment addr) {
@@ -140,106 +140,106 @@ class FuseImpl extends Fuse {
 
 	@VisibleForTesting
 	int flush(MemorySegment path, MemorySegment fi) {
-		return fuseOperations.flush(path.getString(0), new FileInfoImpl(fi));
+		return fuseOperations.flush(path.getString(0), new FileInfoImpl(fi), fuseGetContext());
 	}
 
 	@VisibleForTesting
 	int fsync(MemorySegment path, int datasync, MemorySegment fi) {
-		return fuseOperations.fsync(path.getString(0), datasync, new FileInfoImpl(fi));
+		return fuseOperations.fsync(path.getString(0), datasync, new FileInfoImpl(fi), fuseGetContext());
 	}
 
 	@VisibleForTesting
 	int fsyncdir(MemorySegment path, int datasync, MemorySegment fi) {
-		return fuseOperations.fsyncdir(MemoryUtils.toUtf8StringOrNull(path), datasync, new FileInfoImpl(fi));
+		return fuseOperations.fsyncdir(MemoryUtils.toUtf8StringOrNull(path), datasync, new FileInfoImpl(fi), fuseGetContext());
 	}
 
 	@VisibleForTesting
 	int getattr(MemorySegment path, MemorySegment stat, MemorySegment fi) {
-		return fuseOperations.getattr(path.getString(0), new StatImpl(stat), FileInfoImpl.ofNullable(fi));
+		return fuseOperations.getattr(path.getString(0), new StatImpl(stat), FileInfoImpl.ofNullable(fi), fuseGetContext());
 	}
 
 	@VisibleForTesting
 	int getxattr(MemorySegment path, MemorySegment name, MemorySegment value, long size) {
 		var val = value.reinterpret(size).asByteBuffer();
-		return fuseOperations.getxattr(path.getString(0), name.getString(0), val);
+		return fuseOperations.getxattr(path.getString(0), name.getString(0), val, fuseGetContext());
 	}
 
 	@VisibleForTesting
 	int setxattr(MemorySegment path, MemorySegment name, MemorySegment value, long size, int flags) {
 		var val = value.reinterpret(size).asByteBuffer();
-		return fuseOperations.setxattr(path.getString(0), name.getString(0), val, flags);
+		return fuseOperations.setxattr(path.getString(0), name.getString(0), val, flags, fuseGetContext());
 	}
 
 	@VisibleForTesting
 	int listxattr(MemorySegment path, MemorySegment value, long size) {
 		var val = value.reinterpret(size).asByteBuffer();
-		return fuseOperations.listxattr(path.getString(0), val);
+		return fuseOperations.listxattr(path.getString(0), val, fuseGetContext());
 	}
 
 	@VisibleForTesting
 	int removexattr(MemorySegment path, MemorySegment name) {
-		return fuseOperations.removexattr(path.getString(0), name.getString(0));
+		return fuseOperations.removexattr(path.getString(0), name.getString(0), fuseGetContext());
 	}
 
 	private int mkdir(MemorySegment path, int mode) {
-		return fuseOperations.mkdir(path.getString(0), mode);
+		return fuseOperations.mkdir(path.getString(0), mode, fuseGetContext());
 	}
 
 	private int open(MemorySegment path, MemorySegment fi) {
-		return fuseOperations.open(path.getString(0), new FileInfoImpl(fi));
+		return fuseOperations.open(path.getString(0), new FileInfoImpl(fi), fuseGetContext());
 	}
 
 	private int opendir(MemorySegment path, MemorySegment fi) {
-		return fuseOperations.opendir(path.getString(0), new FileInfoImpl(fi));
+		return fuseOperations.opendir(path.getString(0), new FileInfoImpl(fi), fuseGetContext());
 	}
 
 	private int read(MemorySegment path, MemorySegment buf, long size, long offset, MemorySegment fi) {
 		var buffer = buf.reinterpret(size).asByteBuffer();
-		return fuseOperations.read(path.getString(0), buffer, size, offset, new FileInfoImpl(fi));
+		return fuseOperations.read(path.getString(0), buffer, size, offset, new FileInfoImpl(fi), fuseGetContext());
 	}
 
 	private int readdir(MemorySegment path, MemorySegment buf, MemorySegment filler, long offset, MemorySegment fi, int flags) {
 		try (var arena = Arena.ofConfined()) {
-			return fuseOperations.readdir(path.getString(0), new DirFillerImpl(buf, filler, arena), offset, new FileInfoImpl(fi), flags);
+			return fuseOperations.readdir(path.getString(0), new DirFillerImpl(buf, filler, arena), offset, new FileInfoImpl(fi), flags, fuseGetContext());
 		}
 	}
 
 	private int readlink(MemorySegment path, MemorySegment buf, long len) {
 		var buffer = buf.reinterpret(len).asByteBuffer();
-		return fuseOperations.readlink(path.getString(0), buffer, len);
+		return fuseOperations.readlink(path.getString(0), buffer, len, fuseGetContext());
 	}
 
 	private int release(MemorySegment path, MemorySegment fi) {
-		return fuseOperations.release(path.getString(0), new FileInfoImpl(fi));
+		return fuseOperations.release(path.getString(0), new FileInfoImpl(fi), fuseGetContext());
 	}
 
 	private int releasedir(MemorySegment path, MemorySegment fi) {
-		return fuseOperations.releasedir(MemoryUtils.toUtf8StringOrNull(path), new FileInfoImpl(fi));
+		return fuseOperations.releasedir(MemoryUtils.toUtf8StringOrNull(path), new FileInfoImpl(fi), fuseGetContext());
 	}
 
 	private int rename(MemorySegment oldpath, MemorySegment newpath, int flags) {
-		return fuseOperations.rename(oldpath.getString(0), newpath.getString(0), flags);
+		return fuseOperations.rename(oldpath.getString(0), newpath.getString(0), flags, fuseGetContext());
 	}
 
 	private int rmdir(MemorySegment path) {
-		return fuseOperations.rmdir(path.getString(0));
+		return fuseOperations.rmdir(path.getString(0), fuseGetContext());
 	}
 
 	private int statfs(MemorySegment path, MemorySegment statvfs) {
-		return fuseOperations.statfs(path.getString(0), new StatvfsImpl(statvfs));
+		return fuseOperations.statfs(path.getString(0), new StatvfsImpl(statvfs), fuseGetContext());
 	}
 
 	private int symlink(MemorySegment linkname, MemorySegment target) {
-		return fuseOperations.symlink(linkname.getString(0), target.getString(0));
+		return fuseOperations.symlink(linkname.getString(0), target.getString(0), fuseGetContext());
 	}
 
 	@VisibleForTesting
 	int truncate(MemorySegment path, long size, MemorySegment fi) {
-		return fuseOperations.truncate(path.getString(0), size, FileInfoImpl.ofNullable(fi));
+		return fuseOperations.truncate(path.getString(0), size, FileInfoImpl.ofNullable(fi), fuseGetContext());
 	}
 
 	private int unlink(MemorySegment path) {
-		return fuseOperations.unlink(path.getString(0));
+		return fuseOperations.unlink(path.getString(0), fuseGetContext());
 	}
 
 	@VisibleForTesting
@@ -249,13 +249,13 @@ class FuseImpl extends Fuse {
 			// valid times: https://github.com/winfsp/winfsp/discussions/445
 			var time0 = fuse_timespec.asSlice(times, 0);
 			var time1 = fuse_timespec.asSlice(times, 1);
-			return fuseOperations.utimens(path.getString(0), new TimeSpecImpl(time0), new TimeSpecImpl(time1), FileInfoImpl.ofNullable(fi));
+			return fuseOperations.utimens(path.getString(0), new TimeSpecImpl(time0), new TimeSpecImpl(time1), FileInfoImpl.ofNullable(fi), fuseGetContext());
 		}
 	}
 
 	private int write(MemorySegment path, MemorySegment buf, long size, long offset, MemorySegment fi) {
 		var buffer = buf.reinterpret(size).asByteBuffer();
-		return fuseOperations.write(path.getString(0), buffer, size, offset, new FileInfoImpl(fi));
+		return fuseOperations.write(path.getString(0), buffer, size, offset, new FileInfoImpl(fi), fuseGetContext());
 	}
 
 }

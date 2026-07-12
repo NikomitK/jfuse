@@ -4,6 +4,7 @@ import org.cryptomator.jfuse.api.DirFiller;
 import org.cryptomator.jfuse.api.Errno;
 import org.cryptomator.jfuse.api.FileInfo;
 import org.cryptomator.jfuse.api.Fuse;
+import org.cryptomator.jfuse.api.FuseContext;
 import org.cryptomator.jfuse.api.FuseOperations;
 import org.cryptomator.jfuse.api.FuseMountFailedException;
 import org.cryptomator.jfuse.api.Stat;
@@ -67,7 +68,7 @@ public class RandomFileSystem implements FuseOperations {
 	}
 
 	@Override
-	public int getattr(String path, Stat stat, FileInfo fi) {
+	public int getattr(String path, Stat stat, FileInfo fi, FuseContext fuseContext) {
 		LOG.debug("getattr() {}", path);
 		var node = rfs.getNode(path);
 		if (node == null) {
@@ -93,28 +94,28 @@ public class RandomFileSystem implements FuseOperations {
 	}
 
 	@Override
-	public int open(String path, FileInfo fi) {
+	public int open(String path, FileInfo fi, FuseContext fuseContext) {
 		return 0;
 	}
 
 	@Override
-	public int read(String path, ByteBuffer buf, long size, long offset, FileInfo fi) {
+	public int read(String path, ByteBuffer buf, long size, long offset, FileInfo fi, FuseContext fuseContext) {
 		return 0;
 	}
 
 	@Override
-	public int release(String path, FileInfo fi) {
+	public int release(String path, FileInfo fi, FuseContext fuseContext) {
 		return 0;
 	}
 
 	@Override
-	public int opendir(String path, FileInfo fi) {
+	public int opendir(String path, FileInfo fi, FuseContext fuseContext) {
 		LOG.debug("opendir() {}", path);
 		return 0;
 	}
 
 	@Override
-	public int readdir(String path, DirFiller filler, long offset, FileInfo fi, int flags) {
+	public int readdir(String path, DirFiller filler, long offset, FileInfo fi, int flags, FuseContext fuseContext) {
 		LOG.debug("readdir() {} offset={} plus={}", path, offset, (flags & FUSE_READDIR_PLUS) == flags);
 		var node = rfs.getNode(path);
 		if (node == null) {
@@ -139,13 +140,13 @@ public class RandomFileSystem implements FuseOperations {
 	}
 
 	@Override
-	public int releasedir(String path, FileInfo fi) {
+	public int releasedir(String path, FileInfo fi, FuseContext fuseContext) {
 		LOG.debug("releasedir() {}", path);
 		return 0;
 	}
 
 	@Override
-	public int statfs(String path, Statvfs statvfs) {
+	public int statfs(String path, Statvfs statvfs, FuseContext fuseContext) {
 		LOG.debug("statfs() {}", path);
 		statvfs.setNameMax(255);
 		statvfs.setBsize(4096);

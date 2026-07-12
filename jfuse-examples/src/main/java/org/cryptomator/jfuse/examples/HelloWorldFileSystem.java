@@ -6,6 +6,7 @@ import org.cryptomator.jfuse.api.FileInfo;
 import org.cryptomator.jfuse.api.Fuse;
 import org.cryptomator.jfuse.api.FuseConfig;
 import org.cryptomator.jfuse.api.FuseConnInfo;
+import org.cryptomator.jfuse.api.FuseContext;
 import org.cryptomator.jfuse.api.FuseOperations;
 import org.cryptomator.jfuse.api.FuseMountFailedException;
 import org.cryptomator.jfuse.api.Stat;
@@ -69,14 +70,14 @@ public class HelloWorldFileSystem implements FuseOperations {
 	}
 
 	@Override
-	public int access(String path, int mask) {
+	public int access(String path, int mask, FuseContext fuseContext) {
 		LOG.debug("access() {}", path);
 		return 0;
 	}
 
 	@SuppressWarnings("OctalInteger")
 	@Override
-	public int getattr(String path, Stat stat, FileInfo fi) {
+	public int getattr(String path, Stat stat, FileInfo fi, FuseContext fuseContext) {
 		LOG.debug("getattr() {}", path);
 		if ("/".equals(path)) {
 			stat.setMode(S_IFDIR | 0755);
@@ -108,7 +109,7 @@ public class HelloWorldFileSystem implements FuseOperations {
 	}
 
 	@Override
-	public int open(String path, FileInfo fi) {
+	public int open(String path, FileInfo fi, FuseContext fuseContext) {
 		LOG.debug("open() {}", path);
 		if (!HELLO_PATH.equals(path)) {
 			return -errno.enoent();
@@ -117,7 +118,7 @@ public class HelloWorldFileSystem implements FuseOperations {
 	}
 
 	@Override
-	public int read(String path, ByteBuffer buf, long size, long offset, FileInfo fi) {
+	public int read(String path, ByteBuffer buf, long size, long offset, FileInfo fi, FuseContext fuseContext) {
 		LOG.debug("read() {}", path);
 		if (!HELLO_PATH.equals(path)) {
 			return -errno.enoent();
@@ -132,19 +133,19 @@ public class HelloWorldFileSystem implements FuseOperations {
 	}
 
 	@Override
-	public int release(String path, FileInfo fi) {
+	public int release(String path, FileInfo fi, FuseContext fuseContext) {
 		LOG.debug("release() {}", path);
 		return 0;
 	}
 
 	@Override
-	public int opendir(String path, FileInfo fi) {
+	public int opendir(String path, FileInfo fi, FuseContext fuseContext) {
 		LOG.debug("opendir() {}", path);
 		return 0;
 	}
 
 	@Override
-	public int readdir(String path, DirFiller filler, long offset, FileInfo fi, int flags) {
+	public int readdir(String path, DirFiller filler, long offset, FileInfo fi, int flags, FuseContext fuseContext) {
 		LOG.debug("readdir() {} {}", path, offset);
 		try {
 			filler.fill(".");
@@ -164,13 +165,13 @@ public class HelloWorldFileSystem implements FuseOperations {
 	}
 
 	@Override
-	public int releasedir(String path, FileInfo fi) {
+	public int releasedir(String path, FileInfo fi, FuseContext fuseContext) {
 		LOG.debug("releasedir() {}", path);
 		return 0;
 	}
 
 	@Override
-	public int statfs(String path, Statvfs statvfs) {
+	public int statfs(String path, Statvfs statvfs, FuseContext fuseContext) {
 		LOG.debug("statfs() {}", path);
 		statvfs.setNameMax(255);
 		statvfs.setBsize(4096);

@@ -57,7 +57,6 @@ import static java.lang.foreign.MemoryLayout.PathElement.*;
  *     int (*fallocate)(const char *, int, off_t, off_t, struct fuse_file_info *);
  *     ssize_t (*copy_file_range)(const char *, struct fuse_file_info *, off_t, const char *, struct fuse_file_info *, off_t, size_t, int);
  *     off_t (*lseek)(const char *, off_t, int, struct fuse_file_info *);
- *     int (*statx)(const char *, int, int, struct statx *, struct fuse_file_info *);
  * }
  * }
  */
@@ -109,8 +108,7 @@ public class fuse_operations {
         fuse_h.C_POINTER.withName("flock"),
         fuse_h.C_POINTER.withName("fallocate"),
         fuse_h.C_POINTER.withName("copy_file_range"),
-        fuse_h.C_POINTER.withName("lseek"),
-        fuse_h.C_POINTER.withName("statx")
+        fuse_h.C_POINTER.withName("lseek")
     ).withName("fuse_operations");
 
     /**
@@ -4326,108 +4324,6 @@ public class fuse_operations {
      */
     public static void lseek(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(lseek$LAYOUT, lseek$OFFSET, fieldValue);
-    }
-
-    /**
-     * {@snippet lang=c :
-     * int (*statx)(const char *, int, int, struct statx *, struct fuse_file_info *)
-     * }
-     */
-    public static class statx {
-
-        statx() {
-            // Should not be called directly
-        }
-
-        /**
-         * The function pointer signature, expressed as a functional interface
-         */
-        public interface Function {
-            int apply(MemorySegment _x0, int _x1, int _x2, MemorySegment _x3, MemorySegment _x4);
-        }
-
-        private static final FunctionDescriptor $DESC = FunctionDescriptor.of(
-            fuse_h.C_INT,
-            fuse_h.C_POINTER,
-            fuse_h.C_INT,
-            fuse_h.C_INT,
-            fuse_h.C_POINTER,
-            fuse_h.C_POINTER
-        );
-
-        /**
-         * The descriptor of this function pointer
-         */
-        public static FunctionDescriptor descriptor() {
-            return $DESC;
-        }
-
-        private static final MethodHandle UP$MH = fuse_h.upcallHandle(statx.Function.class, "apply", $DESC);
-
-        /**
-         * Allocates a new upcall stub, whose implementation is defined by {@code fi}.
-         * The lifetime of the returned segment is managed by {@code arena}
-         */
-        public static MemorySegment allocate(statx.Function fi, Arena arena) {
-            return Linker.nativeLinker().upcallStub(UP$MH.bindTo(fi), $DESC, arena);
-        }
-
-        private static final MethodHandle DOWN$MH = Linker.nativeLinker().downcallHandle($DESC);
-
-        /**
-         * Invoke the upcall stub {@code funcPtr}, with given parameters
-         */
-        public static int invoke(MemorySegment funcPtr,MemorySegment _x0, int _x1, int _x2, MemorySegment _x3, MemorySegment _x4) {
-            try {
-                return (int) DOWN$MH.invokeExact(funcPtr, _x0, _x1, _x2, _x3, _x4);
-            } catch (Throwable ex$) {
-                throw new AssertionError("should not reach here", ex$);
-            }
-        }
-    }
-
-    private static final AddressLayout statx$LAYOUT = (AddressLayout)$LAYOUT.select(groupElement("statx"));
-
-    /**
-     * Layout for field:
-     * {@snippet lang=c :
-     * int (*statx)(const char *, int, int, struct statx *, struct fuse_file_info *)
-     * }
-     */
-    public static final AddressLayout statx$layout() {
-        return statx$LAYOUT;
-    }
-
-    private static final long statx$OFFSET = 336;
-
-    /**
-     * Offset for field:
-     * {@snippet lang=c :
-     * int (*statx)(const char *, int, int, struct statx *, struct fuse_file_info *)
-     * }
-     */
-    public static final long statx$offset() {
-        return statx$OFFSET;
-    }
-
-    /**
-     * Getter for field:
-     * {@snippet lang=c :
-     * int (*statx)(const char *, int, int, struct statx *, struct fuse_file_info *)
-     * }
-     */
-    public static MemorySegment statx(MemorySegment struct) {
-        return struct.get(statx$LAYOUT, statx$OFFSET);
-    }
-
-    /**
-     * Setter for field:
-     * {@snippet lang=c :
-     * int (*statx)(const char *, int, int, struct statx *, struct fuse_file_info *)
-     * }
-     */
-    public static void statx(MemorySegment struct, MemorySegment fieldValue) {
-        struct.set(statx$LAYOUT, statx$OFFSET, fieldValue);
     }
 
     /**
