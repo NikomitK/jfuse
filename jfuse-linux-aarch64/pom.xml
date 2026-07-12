@@ -11,7 +11,7 @@
 	<artifactId>jfuse-linux-aarch64</artifactId>
 	<name>jFUSE Linux aarch64</name>
 	<description>Java FUSE bindings for Linux aarch64</description>
-	<url>https://github.com/cryptomator/jfuse/tree/develop/jfuse-linux-aarch64</url>
+	<url>https://github.com/nikomitk/jfuse/tree/develop/jfuse-linux-aarch64</url>
 
 	<properties>
 		<linux.headerSearchPath>/Users/sebastian/Documents/inc/aarch64-linux-gnu/include</linux.headerSearchPath> <!-- debian package libc6-dev-aarch64-cross -->

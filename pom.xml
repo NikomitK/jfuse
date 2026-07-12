@@ -9,7 +9,7 @@
 	<version>0.8.0-SNAPSHOT</version>
 	<name>jFUSE</name>
 	<description>Java bindings for FUSE using foreign functions &amp; memory API</description>
-	<url>https://github.com/cryptomator/jfuse</url>
+	<url>https://github.com/nikomitk/jfuse</url>
 
 	<licenses>
 		<license>
@@ -19,20 +19,10 @@
 		</license>
 	</licenses>
 
-	<developers>
-		<developer>
-			<name>Sebastian Stenzel</name>
-			<email>sebastian.stenzel@gmail.com</email>
-			<timezone>+1</timezone>
-			<organization>cryptomator.org</organization>
-			<organizationUrl>http://cryptomator.org</organizationUrl>
-		</developer>
-	</developers>
-
 	<scm>
-		<connection>scm:git:git@github.com:cryptomator/jfuse.git</connection>
-		<developerConnection>scm:git:git@github.com:cryptomator/jfuse.git</developerConnection>
-		<url>https://github.com/cryptomator/jfuse</url>
+		<connection>scm:git:git@github.com:NikomitK/jfuse.git</connection>
+		<developerConnection>scm:git:git@github.com:NikomitK/jfuse.git</developerConnection>
+		<url>https://github.com/NikomitK/jfuse</url>
 	</scm>
 
 	<properties>
@@ -327,6 +317,17 @@
 					<id>github</id>
 					<name>GitHub Packages</name>
 					<url>https://maven.pkg.github.com/cryptomator/jfuse</url>
+				</repository>
+			</distributionManagement>
+		</profile>
+
+		<profile>
+			<id>deploy-codeberg</id>
+			<distributionManagement>
+				<repository>
+					<id>codeberg</id>
+					<name>Codeberg Packages</name>
+					<url>https://codeberg.org/api/packages/nikomitk/maven</url>
 				</repository>
 			</distributionManagement>
 		</profile>

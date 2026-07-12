@@ -11,5 +11,5 @@
 	<artifactId>jfuse-api</artifactId>
 	<name>jFUSE API</name>
 	<description>The main API of jFUSE</description>
-	<url>https://github.com/cryptomator/jfuse/tree/develop/jfuse-api</url>
+	<url>https://github.com/nikomitk/jfuse/tree/develop/jfuse-api</url>
 </project>

@@ -11,7 +11,7 @@
 	<artifactId>jfuse-linux-amd64</artifactId>
 	<name>jFUSE Linux x86_64</name>
 	<description>Java FUSE bindings for Linux x86_64</description>
-	<url>https://github.com/cryptomator/jfuse/tree/develop/jfuse-linux-amd64</url>
+	<url>https://github.com/nikomitk/jfuse/tree/develop/jfuse-linux-amd64</url>
 
 	<properties>
 		<linux.headerSearchPath>/usr/include</linux.headerSearchPath>
