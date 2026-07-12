@@ -75,7 +75,7 @@ Usage examples can be found under [`/jfuse-examples/`](jfuse-examples). You basi
 
 ```xml
 <dependency>
-	<groupId>org.cryptomator</groupId>
+	<groupId>net.nikomitk</groupId>
 	<artifactId>jfuse</artifactId>
 	<version>x.y.z</version>
 </dependency>
