@@ -110,6 +110,7 @@
 										<includeFunction>fuse_exit</includeFunction>
 										<includeFunction>fuse_unmount</includeFunction>
 										<includeFunction>fuse_destroy</includeFunction>
+										<includeFunction>fuse_get_context</includeFunction>
 									</includeFunctions>
 									<includeTypedefs>
 										<includeTypedef>fuse_fill_dir_t</includeTypedef>
@@ -122,6 +123,7 @@
 										<includeStruct>timespec</includeStruct>
 										<includeStruct>fuse_conn_info</includeStruct>
 										<includeStruct>fuse_args</includeStruct>
+										<includeStruct>fuse_context</includeStruct>
 									</includeStructs>
 								</configuration>
 							</execution>
