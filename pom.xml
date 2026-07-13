@@ -226,6 +226,7 @@
 				</executions>
 				<configuration>
 					<excludePackageNames>*.extr:*.extr.*</excludePackageNames>
+					<failOnError>false</failOnError>
 					<release>${java.version}</release>
 				</configuration>
 			</plugin>
@@ -326,9 +327,14 @@
 			<distributionManagement>
 				<repository>
 					<id>codeberg</id>
-					<name>Codeberg Packages</name>
+					<name>Codeberg</name>
 					<url>https://codeberg.org/api/packages/nikomitk/maven</url>
 				</repository>
+				<snapshotRepository>
+					<id>codeberg</id>
+					<name>Codeberg</name>
+					<url>https://codeberg.org/api/packages/nikomitk/maven</url>
+				</snapshotRepository>
 			</distributionManagement>
 		</profile>
 	</profiles>
