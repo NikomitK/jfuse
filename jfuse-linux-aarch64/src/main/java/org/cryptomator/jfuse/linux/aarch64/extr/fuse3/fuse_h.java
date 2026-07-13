@@ -758,6 +758,62 @@ public class fuse_h {
         }
     }
 
+    private static class fuse_get_context {
+        public static final FunctionDescriptor DESC = FunctionDescriptor.of(
+            fuse_h.C_POINTER    );
+
+        public static final MemorySegment ADDR = fuse_h.findOrThrow("fuse_get_context");
+
+        public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(ADDR, DESC);
+    }
+
+    /**
+     * Function descriptor for:
+     * {@snippet lang=c :
+     * struct fuse_context *fuse_get_context()
+     * }
+     */
+    public static FunctionDescriptor fuse_get_context$descriptor() {
+        return fuse_get_context.DESC;
+    }
+
+    /**
+     * Downcall method handle for:
+     * {@snippet lang=c :
+     * struct fuse_context *fuse_get_context()
+     * }
+     */
+    public static MethodHandle fuse_get_context$handle() {
+        return fuse_get_context.HANDLE;
+    }
+
+    /**
+     * Address for:
+     * {@snippet lang=c :
+     * struct fuse_context *fuse_get_context()
+     * }
+     */
+    public static MemorySegment fuse_get_context$address() {
+        return fuse_get_context.ADDR;
+    }
+
+    /**
+     * {@snippet lang=c :
+     * struct fuse_context *fuse_get_context()
+     * }
+     */
+    public static MemorySegment fuse_get_context() {
+        var mh$ = fuse_get_context.HANDLE;
+        try {
+            if (TRACE_DOWNCALLS) {
+                traceDowncall("fuse_get_context");
+            }
+            return (MemorySegment)mh$.invokeExact();
+        } catch (Throwable ex$) {
+           throw new AssertionError("should not reach here", ex$);
+        }
+    }
+
     private static class fuse_get_session {
         public static final FunctionDescriptor DESC = FunctionDescriptor.of(
             fuse_h.C_POINTER,
