@@ -8,6 +8,8 @@ import org.cryptomator.jfuse.api.platforms.Architecture;
 import org.cryptomator.jfuse.api.platforms.OperatingSystem;
 import org.cryptomator.jfuse.api.platforms.SupportedPlatform;
 
+import java.util.logging.Logger;
+
 /**
  * Builds FUSE file system instances on macOS.
  */
@@ -48,6 +50,7 @@ public class MacFuseBuilder implements FuseBuilder {
 					System.loadLibrary(DEFAULT_FUSET_LIBNAMNE);
 				} catch (UnsatisfiedLinkError errorLoadingFuseT) {
 					errorLoadingFuseT.addSuppressed(errorLoadingMacFuse);
+					Logger.getLogger("MacFuseBuilder").severe("Unable to load MacFuse library. Have you tried adding -Djava.library.path=/usr/local/lib to your java start command?");
 					throw errorLoadingFuseT;
 				}
 			}

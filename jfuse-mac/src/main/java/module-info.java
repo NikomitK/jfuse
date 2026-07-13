@@ -10,6 +10,7 @@ module org.cryptomator.jfuse.mac {
 	requires static org.jetbrains.annotations;
 
 	requires org.cryptomator.jfuse.api;
+	requires java.logging;
 
 	provides FuseBuilder with MacFuseBuilder;
 }
