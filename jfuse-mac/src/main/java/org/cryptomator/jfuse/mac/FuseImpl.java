@@ -1,11 +1,13 @@
 package org.cryptomator.jfuse.mac;
 
 import org.cryptomator.jfuse.api.Fuse;
+import org.cryptomator.jfuse.api.FuseContext;
 import org.cryptomator.jfuse.api.FuseMount;
 import org.cryptomator.jfuse.api.FuseMountFailedException;
 import org.cryptomator.jfuse.api.FuseOperations;
 import org.cryptomator.jfuse.api.util.MemoryUtils;
 import org.cryptomator.jfuse.mac.extr.fuse.fuse_args;
+import org.cryptomator.jfuse.mac.extr.fuse.fuse_context;
 import org.cryptomator.jfuse.mac.extr.fuse.fuse_h;
 import org.cryptomator.jfuse.mac.extr.fuse.fuse_operations;
 import org.cryptomator.jfuse.mac.extr.fuse.timespec;
@@ -38,6 +40,16 @@ final class FuseImpl extends Fuse {
 			throw new FuseMountFailedException("fuse_new failed");
 		}
 		return new FuseMountImpl(fuse, ch, fuseArgs);
+	}
+
+	@Override
+	public FuseContext fuseGetContext() {
+		var context = fuse_h.fuse_get_context();
+		int uid = fuse_context.uid(context);
+		int gid = fuse_context.gid(context);
+		int pid =  fuse_context.pid(context);
+		int umask = fuse_context.umask(context);
+		return new FuseContext(this, uid, gid, pid, umask);
 	}
 
 	@VisibleForTesting
